@@ -57,6 +57,10 @@ export default {
   created() {
     getRatings().then(res => {
       this.data = res.data.data;
+
+      this.data.forEach(function(v) {
+          v.rateTime=new Date(parseInt(v.rateTime) * 1000).toLocaleString().replace(/年|月/g, "/").replace(/日/g, " ");
+      });
     });
   }
 };

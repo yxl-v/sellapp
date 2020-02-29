@@ -10,6 +10,7 @@ const routes=[
         name:'Main',
         component:Main,
         children:[
+            {path:'/',component:()=>import('../views/Goods.vue')},
             //商品
             {path:'/goods',name:'goods',component:()=>import('../views/Goods.vue')},
             //评价
@@ -21,6 +22,7 @@ const routes=[
         ]
 
     },
+    
 ]
 
 const router =new VueRouter({
