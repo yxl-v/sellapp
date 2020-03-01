@@ -53,13 +53,44 @@ export default {
     new BScroll(document.querySelector(".left-div"),{
       click:true
     });
-    this.rightDiv=new BScroll(document.querySelector(".right-div"));
+    this.rightDiv=new BScroll(document.querySelector(".right-div"),{
+      probeType:3//实时派发滚动事件
+    });
+    this.rightDiv.on('scroll',({y})=>{
+      let _y=Math.abs(y)
+
+      //获取div的高度，计算所有div的高度，而且还要高频获取（反复获取，要考验性能）
+      for (let divObj of this.getDivMath){
+        //根据计算完毕的DIV对象，判断y的区间端，如果处于某一个区间端，那就把左侧索引设置为对应的位置
+        if(_y >=divObj.min && _y<divObj.max){
+          this.curSelected=divObj.index;
+          return;//结束剩下的所有循环
+        }
+      }
+    })
   },
   methods:{
     choosefoods(index){
       this.curSelected=index;
 
       this.rightDiv.scrollToElement(document.getElementById(index),600)
+    }
+  },
+  computed: {
+    //获取div的高度，计算所有div的高度，而且还要高频获取（反复获取，要考验性能）
+    getDivMath(){
+      //算法
+      let arr=[];
+      let total=0;//之前div所有高度的累计
+      //获取div的高度，根据数组索引，获取每一个div的高度
+      for(let i=0;i<this.data.length;i++){
+        let curDivHeight=document.getElementById(i).offsetHeight;
+        //min:之前div的高度累计 max:之前div累加的高度+自身的高度
+        arr.push({min:total,max:total+curDivHeight,index:i});
+        //每循环一次累计之前div的高度
+        total+=curDivHeight;
+      }
+      return arr;
     }
   },
 };

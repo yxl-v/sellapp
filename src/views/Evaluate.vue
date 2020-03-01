@@ -50,16 +50,40 @@ export default {
   data() {
     return {
       data: [],
-      valueDisabled1:3.9,
-      valueDisabled2:4.0,
+      valueDisabled1: 3.9,
+      valueDisabled2: 4.0
     };
   },
   created() {
     getRatings().then(res => {
       this.data = res.data.data;
-
       this.data.forEach(function(v) {
-          v.rateTime=new Date(parseInt(v.rateTime) * 1000).toLocaleString().replace(/年|月/g, "/").replace(/日/g, " ");
+        function newtime(sjx) {
+          var sj = new Date(sjx);
+          var year = sj.getFullYear();
+          var month = sj.getMonth() + 1;
+          if (month < 10) {
+            month = "0" + month;
+          }
+          var day = sj.getDate();
+          if (day < 10) {
+            day = "0" + day;
+          }
+          var hours = sj.getHours();
+          if (hours < 10) {
+            hours = "0" + hours;
+          }
+          var minutes = sj.getMinutes();
+          if (minutes < 10) {
+            minutes = "0" + minutes;
+          }
+          var seconds = sj.getSeconds();
+          if (seconds < 10) {
+            seconds = "0" + seconds;
+          }
+          return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+        v.rateTime = newtime(v.rateTime);
       });
     });
   }
@@ -91,11 +115,11 @@ export default {
     font-size: 16px;
     line-height: 32px;
     color: black;
-    .pf{
+    .pf {
       font-size: 18px;
     }
-    .eve-right-3{
-      span{
+    .eve-right-3 {
+      span {
         color: rgb(148, 146, 146);
         margin-left: 15px;
       }
