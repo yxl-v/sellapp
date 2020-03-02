@@ -25,7 +25,7 @@
              <p class="onlysee"><Icon type="md-checkmark-circle" />只看有内容的评价</p>
              <!-- 内容 -->
              <div class="content">
-                  <div v-for="(v,i) in data" :key="i" class="conts">
+                  <div v-for="(v,i) in evaluatelist" :key="i" class="conts">
                       <div class="uesrimg"><img :src="v.avatar" alt=""></div>
                       <div class="txt">
                           <p class="user-time">
@@ -46,18 +46,18 @@
 
 <script>
 import { getRatings } from "../api/apis.js";
+// import BScroll from "better-scroll";
 export default {
   data() {
     return {
-      data: [],
       valueDisabled1: 3.9,
       valueDisabled2: 4.0
     };
   },
   created() {
     getRatings().then(res => {
-      this.data = res.data.data;
-      this.data.forEach(function(v) {
+      this.$store.commit('initEvaluateList', res.data.data);
+      this.evaluatelist.forEach(function(v) {
         function newtime(sjx) {
           var sj = new Date(sjx);
           var year = sj.getFullYear();
@@ -86,7 +86,15 @@ export default {
         v.rateTime = newtime(v.rateTime);
       });
     });
-  }
+  },
+  // mounted() {
+  //   new BScroll(document.getElementById("#evaluate"));
+  // },
+  computed: {
+    evaluatelist(){
+      return this.$store.state.evaluatelist
+    }
+  },
 };
 </script>
 
